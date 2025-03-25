@@ -13,7 +13,7 @@ assert maximo_encadenado(24, 9, 18) == 24
 
 
 def maximo_cuadruple(a: float, b: float, c: float, d: float) -> float:
-    max(a, b, c, d)
+    return max(a, b, c, d)
 
 assert maximo_cuadruple(1, 10, 5, -5) == 10
 assert maximo_cuadruple(4, 9, 18, 6) == 18
@@ -25,9 +25,7 @@ assert maximo_cuadruple(24, 9, 18, 30) == 30
 
 
 def maximo_arbitrario(*args) -> float:
-   x = join(args)
-   https://docs.python.org/3/tutorial/controlflow.html#arbitrary-argument-lists
-
+    return max(args)
 
 # NO MODIFICAR - INICIO
 assert maximo_arbitrario(1, 10, 5, -5) == 10
@@ -41,8 +39,14 @@ assert maximo_arbitrario(24, 9, 18, 30) == 30
 
 
 def maximo_recursivo(*args) -> float:
-    """Re-Escribir de forma recursiva."""
-    pass # Completar
+    # Base case: if there's only one argument, return it
+    if len(args) == 1:
+        return args[0]
+    # Recursive case: compare the first argument with the max of the rest
+    first = args[0]
+    rest_max = maximo_recursivo(*args[1:])  # Recurse with remaining args
+    return first if first > rest_max else rest_max
+    
 
 
 # NO MODIFICAR - INICIO
