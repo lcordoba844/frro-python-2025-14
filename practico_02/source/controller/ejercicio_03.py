@@ -11,7 +11,12 @@ comando (estando parados dentro de la carpeta practico_02):
 $PATH$/practico_02> python -m source.controller.ejercicio_03
 """
 
-# Completar
+from source.controller import controller
+from source import util
+from source.data import database
+from config import test_config
+from config.ci_cd import deploy_travis
+import main
 
 # NO MODIFICAR - INICIO
 assert main.name == "main"
