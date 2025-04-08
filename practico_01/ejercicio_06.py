@@ -56,8 +56,9 @@ def numeros_al_final_filter(lista: List[Union[float, str]]) -> List[Union[float,
     """CHALLENGE OPCIONAL - Re-escribir utilizando la función filter.
     Referencia: https://docs.python.org/3/library/functions.html#filter
     """
-    pass # Completar
-
+    letras = list(filter(lambda x: isinstance(x, str), lista))
+    numeros = list(filter(lambda x: isinstance(x, (int, float)), lista))
+    return letras + numeros
 
 # NO MODIFICAR - INICIO
 if __name__ == "__main__":
@@ -70,7 +71,17 @@ if __name__ == "__main__":
 
 def numeros_al_final_recursivo(lista: List[Union[float, str]]) -> List[Union[float, str]]:
     """CHALLENGE OPCIONAL - Re-escribir de forma recursiva."""
-    pass # Completar
+    def helper(resto, strs, nums):
+        if not resto:
+            return strs + nums
+        primero, *siguiente = resto
+        if isinstance(primero, (int, float)):
+            nums.append(primero)
+        else:
+            strs.append(primero)
+        return helper(siguiente, strs, nums)
+
+    return helper(lista, [], []) #Esta es una solucion pero la hizo GPT.
 
 
 # NO MODIFICAR - INICIO
