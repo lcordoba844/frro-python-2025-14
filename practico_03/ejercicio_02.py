@@ -9,9 +9,17 @@ class Articulo:
         - Utilizar sólamente el constructor (__init__) y un método de
           clase (@classmethod) con una variable de clase
     """
+    _last_id = 0
+    
+    def __init__(self, nombre= "tv"):
+        self.id_ = Articulo.generate_id()
+        self.nombre = nombre
 
-    # Completar
-
+    @classmethod
+    def generate_id(cls):
+        current_id = cls._last_id + 1
+        cls._last_id = current_id
+        return current_id
 
 # NO MODIFICAR - INICIO
 art1 = Articulo("manzana")

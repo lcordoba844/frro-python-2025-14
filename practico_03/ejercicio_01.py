@@ -19,7 +19,6 @@ class Rectangulo:
     #Se puede agregar que valide que los numeros sean positivos.
 
 
-
 # NO MODIFICAR - INICIO
 
 # Test Constructor
