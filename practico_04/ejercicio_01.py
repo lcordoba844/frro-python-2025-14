@@ -18,7 +18,7 @@ def crear_tabla():
         CREATE TABLE IF NOT EXISTS Persona (
             IdPersona INTEGER PRIMARY KEY AUTOINCREMENT,
             Nombre TEXT(30),
-            FechaNacimiento DATE(30),
+            FechaNacimiento TEXT(30),
             DNI INTEGER,
             Altura INTEGER
         )

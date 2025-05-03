@@ -8,11 +8,6 @@ def agregar_persona(nombre, nacimiento, dni, altura):
     """Implementar la funcion agregar_persona, que inserte un registro en la 
     tabla Persona y devuelva los datos ingresados el id del nuevo registro."""
     pass # Completar
-    nombre = input("Ingrese el nombre de la persona: ")
-    fecha_nac = input("Ingrese la fecha de nacimiento (DD/MM/AAA)")
-    dni = int(input("Ingrese el numero de dni: "))
-    altura = int(input("Ingrese la altura: "))
-
     conn = sqlite3.connect("mi_base.db")
     cursor = conn.cursor()
     cursor.execute("INSERT INTO Persona (nombre, fecha_nac, dni, altura) VALUES (?,?,?,?)")
