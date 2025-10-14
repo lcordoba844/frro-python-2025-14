@@ -127,6 +127,3 @@ El sistema se desarrollará con una **arquitectura en 3 capas**:
 | **Testing**                        | Pytest               | Pruebas unitarias de reglas de negocio y detección.                  |
 
 ---
-
-¿Querés que te lo deje también con los diagramas tipo el del modelo de dominio (para hacerlo igual que el ejemplo de Q-Sec)?
-Puedo generarte el **diagrama UML** del dominio y el **de arquitectura** listos para entregar.
