@@ -3,7 +3,7 @@
 ## Descripción del Proyecto
 
 **SignLearn** es un juego educativo interactivo diseñado para que los niños aprendan y practiquen el lenguaje de señas de manera divertida y dinámica.
-A través de la cámara, el sistema muestra en pantalla una letra o seña que el niño debe imitar con sus manos. Utilizando **visión por computadora (OpenCV)** y un **modelo de inteligencia artificial entrenado para reconocer gestos**, el juego evalúa la precisión y el tiempo de ejecución del gesto.
+A través de la cámara, el sistema muestra en pantalla una letra o seña que el niño debe imitar con sus manos. Utilizando **visión por computadora (OpenCV)** y un **calculo de distancias**, el juego evalúa la precisión y el tiempo de ejecución del gesto.
 
 Cada intento se registra en la base de datos, permitiendo analizar el progreso individual, ofrecer retroalimentación automática y mantener un historial de desempeño.
 El sistema incorpora elementos de **gamificación**, como puntos, niveles y logros, para incentivar el aprendizaje y la práctica constante.
@@ -18,8 +18,8 @@ El objetivo principal de *SignLearn* es fomentar el aprendizaje visual y corpora
 
 1. **Usuario**
 
-   * Representa al jugador (niño o usuario registrado).
-   * Guarda información básica: nombre, edad, usuario, contraseña (encriptada).
+   * Representa al jugador sin necesidad de registrarse.
+   * Guarda unicamente su nombre.
    * Se relaciona con las partidas o sesiones de juego que ha realizado.
 
 2. **SesionJuego**
@@ -28,65 +28,42 @@ El objetivo principal de *SignLearn* es fomentar el aprendizaje visual y corpora
    * Contiene información sobre:
 
      * Fecha y hora de la sesión.
-     * Nivel o dificultad.
-     * Tiempo promedio por seña.
-     * Precisión promedio.
      * Puntaje total obtenido.
-     * Resultado (por ejemplo, “superado” o “a mejorar”).
+     * Resultado (en valor numérico entero).
    * Cada sesión pertenece a un único usuario.
-
-3. **DesempeñoSeña**
-
-   * Representa el análisis de una seña específica durante una sesión.
-   * Guarda la seña mostrada, la precisión obtenida, el tiempo de reacción y si fue reconocida correctamente.
-   * Está vinculada a una sesión de juego.
 
 ---
 
 ## Reglas de Negocio
 
-1. **RN01 – Validación de señas**
+1. **RN01| – Registro de puntajes válidos**
+* Solo se podrán registrar puntajes cuando el jugador haya completado una partida.
+* Cada registro debe incluir: nombre del jugador, puntaje obtenido y fecha y hora exacta de finalización.
+* Los nombres se limitan a 30 caracteres y no pueden quedar vacíos.
 
-   * El sistema solo considera una seña “correcta” si la precisión de la detección (según el modelo IA) supera el umbral del 80%.
+1. **RN02 – Orden y visualización del ranking**
+* El sistema debe mostrar los puntajes en orden descendente por puntaje y, en caso de empate, por fecha ascendente
+* El usuario puede elegir la cantidad de resultados visibles (Top 10, 20 o 50) y filtrar por nombre.
 
-2. **RN02 – Asignación de puntos**
-
-   * El puntaje de cada seña depende de:
-
-     * Precisión (mayor precisión = más puntos).
-     * Tiempo (menor tiempo = bonificación).
-   * Si el jugador supera el 90% de precisión promedio en la sesión, obtiene puntos extra.
-
-3. **RN03 – Progresión de niveles**
-
-   * Para avanzar de nivel, el usuario debe completar al menos 10 señas con una precisión promedio mayor o igual al 85%.
-
-4. **RN04 – Retroalimentación**
-
-   * Al finalizar cada sesión, el sistema genera un reporte visual que muestra:
-
-     * Porcentaje de aciertos.
-     * Señales que necesitan mejorar.
-     * Progreso respecto a sesiones anteriores.
-
-5. **RN05 – Registro y seguridad**
-
-   * Todas las contraseñas deben almacenarse en formato cifrado (hash SHA256 o bcrypt).
-   * Los datos del usuario y su progreso deben mantenerse privados.
-
+3. **RN03 – Integridad del juego en ejecución**
+* Solo puede haber una instancia activa del juego en un mismo dispositivo al mismo tiempo.
+* Si el juego ya está en ejecución, el botón “Jugar” no debe lanzar una nueva partida hasta que la actual finalice o se detenga.
 ---
 
 ## Casos de Uso
 
 | **CU**   | **Nombre del Caso de Uso**        | **Descripción**                                                                                                                    |
 | :------- | :-------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
-| **CU01** | Registro de Usuario               | Permite que un nuevo jugador se registre en el sistema ingresando su nombre, edad, usuario y contraseña.                           |
-| **CU02** | Inicio de Sesión                  | Permite que el usuario autenticado acceda al juego y a su historial de progreso.                                                   |
-| **CU03** | Iniciar Juego / Sesión            | El usuario inicia una nueva sesión de práctica. Se muestran las señas y se activa la cámara para el reconocimiento.                |
-| **CU04** | Detección y Evaluación de Señales | El sistema utiliza OpenCV y el modelo de IA para comparar la seña del usuario con la seña objetivo, calculando precisión y tiempo. |
-| **CU05** | Cálculo de Puntuación y Nivel     | El sistema calcula los puntos obtenidos según precisión y tiempo, y determina si el jugador avanza de nivel.                       |
-| **CU06** | Almacenamiento de Resultados      | Al finalizar la sesión, se guarda el puntaje, precisión promedio, nivel y fecha en la base de datos.                               |
-| **CU07** | Visualización de Progreso         | El usuario puede consultar un resumen de sus sesiones pasadas con estadísticas y evolución de desempeño.                           |
+| **CU01** | Inicio de Sesión                  | Permite que el usuario acceda al juego sin necesidad de registro.   |                                              
+
+| **CU02** | Iniciar Juego / Sesión            | El usuario inicia una nueva sesión de práctica. Se activa la cámara para el reconocimiento.    |            
+
+| **CU03** | Detección y Evaluación de Señales | El sistema utiliza OpenCV y realiza calculo de distancias entre los puntos de la mano. |
+
+| **CU04** | Cálculo de Puntuación y Nivel     | El sistema calcula los puntos obtenidos segun la cantidad de letras seguidas que va acertando el usuario y esto aumenta el bonus por acertar la siguiente  |
+        
+| **CU05** | Almacenamiento de Resultados      | Al finalizar la sesión, se guarda el nombre, el puntaje y la fecha de finalización en la base de datos.                               |
+| **CU06** | Visualización de Progreso         | El usuario puede consultar un resumen de sus sesiones pasadas.                           |
 
 ---
 
@@ -96,22 +73,21 @@ El sistema se desarrollará con una **arquitectura en 3 capas**:
 
 1. **Capa de Presentación**
 
-   * Implementada con **Flask** o **Streamlit** (según la interfaz elegida).
-   * Gestiona la interacción del usuario, mostrando señas, niveles y resultados.
+   * Implementada con **Flask**.
+   * Gestiona la interacción del usuario y los resultados.
    * Controla la cámara y los elementos de gamificación.
 
 2. **Capa de Negocio**
 
    * Implementada en **Python**.
-   * Contiene la lógica del juego: cálculo de precisión, puntuación, detección de errores y avance de nivel.
-   * Utiliza **OpenCV** y **TensorFlow/PyTorch** (modelo IA para reconocimiento de señas).
-   * Incluye tests unitarios con **Pytest**.
+   * Contiene la lógica del juego: cálculo de distancias, puntuación y detección de errores.
+   * Utiliza **OpenCV**.
 
 3. **Capa de Datos**
 
    * Base de datos **SQLite** (simple y portable).
    * ORM: **SQLAlchemy** para mapear clases Python a tablas.
-   * Se almacenan usuarios, sesiones de juego y desempeño por seña.
+   * Se almacenan usuarios, puntajes y fechas.
 
 ---
 
@@ -119,11 +95,10 @@ El sistema se desarrollará con una **arquitectura en 3 capas**:
 
 | Componente                         | Tecnología           | Descripción                                                          |
 | ---------------------------------- | -------------------- | -------------------------------------------------------------------- |
-| **Frontend / UI**                  | Flask / Streamlit    | Interfaz web para interactuar con el juego y mostrar los resultados. |
+| **Frontend / UI**                  | Flask                | Interfaz web para interactuar con el juego y mostrar los resultados. |
 | **Visión por Computadora**         | OpenCV               | Captura y procesamiento de imágenes en tiempo real.                  |
-| **IA / Reconocimiento de Señales** | TensorFlow o PyTorch | Modelo preentrenado que detecta gestos y calcula precisión.          |
-| **Backend / Lógica de Negocio**    | Python 3.9+          | Contiene toda la lógica del juego y comunicación con el modelo IA.   |
+| **Reconocimiento de Señas**        | MediaPipe            | reconocer gestos manuales en tiempo real y proporciona los resultados reconocidos junto con los puntos de referencia de las manos detectadas                                                                                       |
+| **Backend / Lógica de Negocio**    | Python 3.9+          | Contiene toda la lógica del juego.                                   |
 | **Base de Datos**                  | SQLite + SQLAlchemy  | Almacenamiento de usuarios y sesiones.                               |
-| **Testing**                        | Pytest               | Pruebas unitarias de reglas de negocio y detección.                  |
 
 ---
