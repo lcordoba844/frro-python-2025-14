@@ -16,21 +16,11 @@ El objetivo principal de *SignLearn* es fomentar el aprendizaje visual y corpora
 
 **Entidades Principales:**
 
-1. **Usuario**
+1. **Scores**
 
-   * Representa al jugador sin necesidad de registrarse.
-   * Guarda unicamente su nombre.
-   * Se relaciona con las partidas o sesiones de juego que ha realizado.
+   * Representa la sesion de juego de un usuario.
+   * Almacena name, score y un campo created_at que representa la fecha y hora de la creacion de la sesion
 
-2. **SesionJuego**
-
-   * Registra cada sesión o ronda de práctica del usuario.
-   * Contiene información sobre:
-
-     * Fecha y hora de la sesión.
-     * Puntaje total obtenido.
-     * Resultado (en valor numérico entero).
-   * Cada sesión pertenece a un único usuario.
 
 ---
 
