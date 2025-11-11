@@ -97,7 +97,7 @@ El sistema se desarrollará con una **arquitectura en 3 capas**:
 | ---------------------------------- | -------------------- | -------------------------------------------------------------------- |
 | **Frontend / UI**                  | Flask                | Interfaz web para interactuar con el juego y mostrar los resultados. |
 | **Visión por Computadora**         | OpenCV               | Captura y procesamiento de imágenes en tiempo real.                  |
-| **Reconocimiento de Señas**        | MediaPipe            | Reconocer gestos manuales en tiempo real y proporciona los resultados reconocidos junto con los puntos de referencia de las manos detectadas                                                                                       |
+| **Reconocimiento de Señas**        | MediaPipe            | Reconoce gestos manuales en tiempo real y proporciona los resultados reconocidos junto con los puntos de referencia de las manos detectadas                                                                                              |
 | **Backend / Lógica de Negocio**    | Python 3.9+          | Contiene toda la lógica del juego.                                   |
 | **Base de Datos**                  | SQLite + SQLAlchemy  | Almacenamiento de usuarios y sesiones.                               |
 
