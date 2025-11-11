@@ -3,7 +3,7 @@
 ## Descripción del Proyecto
 
 **SignLearn** es un juego educativo interactivo diseñado para que los niños aprendan y practiquen el lenguaje de señas de manera divertida y dinámica.
-A través de la cámara, el sistema muestra en pantalla una letra o seña que el niño debe imitar con sus manos. Utilizando **visión por computadora (OpenCV)** y un **calculo de distancias**, el juego evalúa la precisión y el tiempo de ejecución del gesto.
+A través de la cámara, el sistema muestra en pantalla una letra o seña que el niño debe imitar con sus manos. Utilizando **visión por computadora (OpenCV)** y **MediaPipe**, el juego evalua gestos manuales en tiempo real y proporciona los resultados reconocidos junto con los puntos de referencia de las manos detectadas.
 
 Cada intento se registra en la base de datos, permitiendo analizar el progreso individual, ofrecer retroalimentación automática y mantener un historial de desempeño.
 El sistema incorpora elementos de **gamificación**, como puntos, niveles y logros, para incentivar el aprendizaje y la práctica constante.
@@ -97,7 +97,7 @@ El sistema se desarrollará con una **arquitectura en 3 capas**:
 | ---------------------------------- | -------------------- | -------------------------------------------------------------------- |
 | **Frontend / UI**                  | Flask                | Interfaz web para interactuar con el juego y mostrar los resultados. |
 | **Visión por Computadora**         | OpenCV               | Captura y procesamiento de imágenes en tiempo real.                  |
-| **Reconocimiento de Señas**        | MediaPipe            | reconocer gestos manuales en tiempo real y proporciona los resultados reconocidos junto con los puntos de referencia de las manos detectadas                                                                                       |
+| **Reconocimiento de Señas**        | MediaPipe            | Reconocer gestos manuales en tiempo real y proporciona los resultados reconocidos junto con los puntos de referencia de las manos detectadas                                                                                       |
 | **Backend / Lógica de Negocio**    | Python 3.9+          | Contiene toda la lógica del juego.                                   |
 | **Base de Datos**                  | SQLite + SQLAlchemy  | Almacenamiento de usuarios y sesiones.                               |
 
