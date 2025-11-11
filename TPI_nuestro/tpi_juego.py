@@ -176,41 +176,66 @@ def _new_words_queue():
     random.shuffle(words)
     return words
 
-# =================== DB (opcional) ===================
-def init_db():
-    if not USE_DB: return
-    con = sqlite3.connect(DB_PATH)
-    cur = con.cursor()
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS scores(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            score INTEGER NOT NULL,
-            created_at TEXT NOT NULL
-        );
-    """)
-    # Índice para ordenar rápido
-    cur.execute("CREATE INDEX IF NOT EXISTS idx_scores_score ON scores(score DESC);")
-    con.commit()
-    con.close()
+# =================== DB (versión con SQLAlchemy) ===================
+from sqlalchemy import create_engine, Column, Integer, String, DateTime
+from sqlalchemy.orm import declarative_base, sessionmaker
+from datetime import datetime
+import os
 
+# === Configuración del ORM ===
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "scores.db")
+
+engine = create_engine(f"sqlite:///{DB_PATH}", echo=False)
+Base = declarative_base()
+SessionLocal = sessionmaker(bind=engine)
+
+# === Definición del modelo ===
+class Score(Base):
+    __tablename__ = "scores"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(30), nullable=False)
+    score = Column(Integer, nullable=False)
+    created_at = Column(DateTime, default=datetime.now)
+
+# Crear tabla si no existe
+Base.metadata.create_all(engine)
+
+# === Función para guardar un puntaje ===
 def save_score(name, score):
-    if not USE_DB: return
-    con = sqlite3.connect(DB_PATH)
-    cur = con.cursor()
-    cur.execute("INSERT INTO scores(name, score, created_at) VALUES(?,?,?)",
-                (name.strip()[:30], int(score), datetime.now().isoformat(timespec='seconds')))
-    con.commit()
-    con.close()
+    """Guarda un puntaje en la base de datos."""
+    session = SessionLocal()
+    try:
+        new_score = Score(name=name.strip()[:30], score=int(score))
+        session.add(new_score)
+        session.commit()
+    except Exception as e:
+        print(f"⚠️ Error al guardar puntaje: {e}")
+        session.rollback()
+    finally:
+        session.close()
 
-def get_top20():
-    if not USE_DB: return []
-    con = sqlite3.connect(DB_PATH)
-    cur = con.cursor()
-    cur.execute("SELECT name, score, created_at FROM scores ORDER BY score DESC, created_at ASC LIMIT ?;", (TOP_LIMIT,))
-    rows = cur.fetchall()
-    con.close()
-    return rows
+# === Función para inicializar la base ===
+def init_db():
+    """Crea las tablas si no existen (compatibilidad)."""
+    Base.metadata.create_all(engine)
+
+# === Función para obtener el top 20 ===
+def get_top20(limit=20):
+    """Devuelve los puntajes más altos (nombre, puntaje, fecha)."""
+    session = SessionLocal()
+    try:
+        rows = (
+            session.query(Score.name, Score.score, Score.created_at)
+            .order_by(Score.score.desc(), Score.created_at.asc())
+            .limit(limit)
+            .all()
+        )
+        return [(r[0], r[1], r[2].strftime("%d/%m/%Y %H:%M:%S")) for r in rows]
+    finally:
+        session.close()
+
 
 # =================== Game State ===================
 def reset_game_state(player_name):
@@ -256,7 +281,6 @@ def apply_skip(gs):
 def main():
     global _last_click
     random.seed()
-    init_db()
 
     # Ventana grande / fullscreen
     cv2.namedWindow("Senas & Palabras", cv2.WINDOW_NORMAL)

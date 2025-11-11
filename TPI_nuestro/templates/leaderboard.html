@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>🏆 Leaderboard — Señas & Palabras</title>
+  <style>
+    :root {
+      --bg: #0e1118;
+      --panel: #151b28;
+      --panel2: #1b2233;
+      --text: #e8ecf3;
+      --muted: #a5b0c8;
+      --accent: #66aaff;
+      --ok: #41d17a;
+      --warn: #ffd65c;
+      --bad: #ff6e7a;
+      --border: #2a3247;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .wrap {
+      max-width: 960px;
+      width: 100%;
+    }
+
+    .hero {
+      background: linear-gradient(145deg, #20273d, #1b2034);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+      animation: fadeIn .6s ease-in-out;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: .5px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 18px;
+      font-size: 15px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    button, select, input[type="text"] {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #0b1020;
+      font-weight: 600;
+      border-color: #558fdc;
+    }
+
+    button.success {
+      background: var(--ok);
+      color: #082015;
+      font-weight: 600;
+      border-color: #2ab671;
+    }
+
+    button.warn {
+      background: var(--warn);
+      color: #271c03;
+      font-weight: 600;
+      border-color: #f0c849;
+    }
+
+    .board {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 22px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    th {
+      background: var(--panel2);
+      color: #cfd9e8;
+      font-weight: 600;
+      letter-spacing: .3px;
+    }
+
+    tr:hover td {
+      background: rgba(255,255,255,0.04);
+    }
+
+    .rank {
+      width: 70px;
+      font-weight: 700;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 16px;
+      text-align: right;
+    }
+
+    .status {
+      margin-left: auto;
+      font-size: 13px;
+      padding: 8px 12px;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>Señas & Palabras — Leaderboard</h1>
+    <div class="subtitle">Mirá los mejores puntajes guardados localmente en <span class="pill">scores.db</span></div>
+    
+    <div class="chips">
+      <div class="chip">🥇🥈🥉 para el Top 3</div>
+      <div class="chip">Filtro por nombre</div>
+      <div class="chip">Top configurable</div>
+      <div class="chip">Botón <b>Jugar</b> lanza el juego local</div>
+    </div>
+
+    <div class="controls">
+      <button id="playBtn" class="success">▶ Jugar</button>
+      <button id="refreshBtn" class="primary">⟳ Actualizar</button>
+      <button id="stopBtn" class="warn">■ Detener</button>
+      <span class="status" id="gameStatus">Estado: <span class="muted">desconocido</span></span>
+    </div>
+
+    <div class="controls">
+      <label>Top:</label>
+      <select id="limitSel">
+        <option value="10">10</option>
+        <option value="20" selected>20</option>
+        <option value="50">50</option>
+      </select>
+      <label>Buscar nombre:</label>
+      <input type="text" id="search" placeholder="Ej: Franco, Ana, ...">
+    </div>
+  </div>
+
+  <div class="board">
+    <table id="tbl">
+      <thead>
+        <tr><th class="rank">#</th><th>Nombre</th><th>Puntaje</th><th>Fecha</th></tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          <td class="rank">
+            {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3 %}🥉{% else %}{{ loop.index }}{% endif %}
+          </td>
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+          <td class="muted">{{ row[2] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer" id="lastUpdate">Última actualización: {{ now }}</div>
+</div>
+
+<script>
+async function api(path, opts={}) {
+  const res = await fetch(path, opts);
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+function renderRows(rows){
+  const tbody = document.querySelector("#tbl tbody");
+  tbody.innerHTML = "";
+  rows.forEach((r, idx) => {
+    const tr = document.createElement("tr");
+    const rank = document.createElement("td");
+    rank.className = "rank";
+    rank.innerHTML = (idx===0?'🥇':idx===1?'🥈':idx===2?'🥉':(idx+1));
+    const tdN = document.createElement("td"); tdN.textContent = r[0];
+    const tdS = document.createElement("td"); tdS.textContent = r[1];
+    const tdD = document.createElement("td"); tdD.className="muted"; tdD.textContent = r[2];
+    tr.append(rank, tdN, tdS, tdD);
+    tbody.appendChild(tr);
+  });
+  document.getElementById("lastUpdate").textContent = "Última actualización: " + (new Date()).toLocaleString();
+}
+
+async function refresh(){
+  const limit = document.getElementById("limitSel").value;
+  const q = document.getElementById("search").value;
+  const data = await api(`/api/top?limit=${limit}&q=${encodeURIComponent(q)}&t=${Date.now()}`);
+  renderRows(data.rows);
+  document.getElementById("gameStatus").innerHTML = "Estado: " + (data.running ? "<b>jugando</b>" : "<span class='muted'>detenido</span>");
+}
+
+document.getElementById("refreshBtn").onclick = refresh;
+document.getElementById("playBtn").onclick = async () => { try{ await api("/api/play", {method:"POST"}); }catch(e){} refresh(); };
+document.getElementById("stopBtn").onclick = async () => { try{ await api("/api/stop", {method:"POST"}); }catch(e){} refresh(); };
+document.getElementById("limitSel").onchange = refresh;
+document.getElementById("search").oninput = refresh;
+refresh();
+</script>
+</body>
+</html>
+
