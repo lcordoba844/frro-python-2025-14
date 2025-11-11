@@ -52,20 +52,15 @@ El objetivo principal de *SignLearn* es fomentar el aprendizaje visual y corpora
 
 ## Casos de Uso
 
-| **CU**   | **Nombre del Caso de Uso**        | **Descripción**                                                                                                                    |
-| :------- | :-------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
-| **CU01** | Inicio de Sesión                  | Permite que el usuario acceda al juego sin necesidad de registro.   |                                              
+| **Código** | **Nombre del Caso de Uso**             | **Descripción**                                                                                                           |
+|-------------|----------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| **CU01**    | Inicio de Sesión                       | Permite que el usuario acceda al juego sin necesidad de registro.                                                         |
+| **CU02**    | Iniciar Juego / Sesión                 | El usuario inicia una nueva sesión de práctica. Se activa la cámara para el reconocimiento.                               |
+| **CU03**    | Detección y Evaluación de Señales      | El sistema utiliza OpenCV y realiza el cálculo de distancias entre los puntos de la mano.                                 |
+| **CU04**    | Cálculo de Puntuación y Nivel          | El sistema calcula los puntos obtenidos según la cantidad de letras seguidas que acierta el usuario y aumenta el bonus.   |
+| **CU05**    | Almacenamiento de Resultados           | Al finalizar la sesión, se guarda el nombre, el puntaje y la fecha de finalización en la base de datos.                   |
+| **CU06**    | Visualización de Progreso              | El usuario puede consultar un resumen de sus sesiones pasadas.                                                            |
 
-| **CU02** | Iniciar Juego / Sesión            | El usuario inicia una nueva sesión de práctica. Se activa la cámara para el reconocimiento.    |            
-
-| **CU03** | Detección y Evaluación de Señales | El sistema utiliza OpenCV y realiza calculo de distancias entre los puntos de la mano. |
-
-| **CU04** | Cálculo de Puntuación y Nivel     | El sistema calcula los puntos obtenidos segun la cantidad de letras seguidas que va acertando el usuario y esto aumenta el bonus por acertar la siguiente  |
-        
-| **CU05** | Almacenamiento de Resultados      | Al finalizar la sesión, se guarda el nombre, el puntaje y la fecha de finalización en la base de datos.                               |
-| **CU06** | Visualización de Progreso         | El usuario puede consultar un resumen de sus sesiones pasadas.                           |
-
----
 
 ## Bosquejo de Arquitectura
 
