@@ -56,7 +56,7 @@ El objetivo principal de *SignLearn* es fomentar el aprendizaje visual y corpora
 |-------------|----------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
 | **CU01**    | Inicio de Sesión                       | Permite que el usuario acceda al juego sin necesidad de registro.                                                         |
 | **CU02**    | Iniciar Juego / Sesión                 | El usuario inicia una nueva sesión de práctica. Se activa la cámara para el reconocimiento.                               |
-| **CU03**    | Detección y Evaluación de Señales      | El sistema utiliza OpenCV y realiza el cálculo de distancias entre los puntos de la mano.                                 |
+| **CU03**    | Detección y Evaluación de Señales      | El sistema utiliza OpenCV y MediaPipe.                                 |
 | **CU04**    | Cálculo de Puntuación y Nivel          | El sistema calcula los puntos obtenidos según la cantidad de letras seguidas que acierta el usuario y aumenta el bonus.   |
 | **CU05**    | Almacenamiento de Resultados           | Al finalizar la sesión, se guarda el nombre, el puntaje y la fecha de finalización en la base de datos.                   |
 | **CU06**    | Visualización de Progreso              | El usuario puede consultar un resumen de sus sesiones pasadas.                                                            |
@@ -76,7 +76,7 @@ El sistema se desarrollará con una **arquitectura en 3 capas**:
 
    * Implementada en **Python**.
    * Contiene la lógica del juego: cálculo de distancias, puntuación y detección de errores.
-   * Utiliza **OpenCV**.
+   * Utiliza **OpenCV** y **MediaPipe**.
 
 3. **Capa de Datos**
 
